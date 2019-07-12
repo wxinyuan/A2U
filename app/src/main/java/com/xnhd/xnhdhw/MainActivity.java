@@ -69,6 +69,7 @@ public class MainActivity extends UnityPlayerActivity
             skuList.add("com.xnhd.xnhdhw.5");
             skuList.add("com.xnhd.xnhdhw.6");
 
+            //PayManager.getInstance().Init(this, skuList);
             PayManager.getInstance().Init(this, skuList);
         }
     }

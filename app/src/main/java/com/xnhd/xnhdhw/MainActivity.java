@@ -4,9 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.xnhd.xnhdhw.login.FacebookActivity;
-import com.xnhd.xnhdhw.login.GoogleActivity;
 import com.unity3d.player.UnityPlayerActivity;
+import com.xnhd.xnhdhw.login.LoginManager;
 import com.xnhd.xnhdhw.pay.PayManager;
 
 import java.util.ArrayList;
@@ -16,40 +15,6 @@ public class MainActivity extends UnityPlayerActivity
 {
     private static final String TAG         = "MainActivity";
 
-    enum LoginType
-    {
-        GOOGLE(0),
-        FACEBOOK(1),
-        VISITOR(2);
-
-        private int value = 0;
-
-        private LoginType(int value)
-        {
-            this.value = value;
-        }
-
-        public static LoginType valueOf(int value)
-        {
-            switch (value)
-            {
-                case 0:
-                    return GOOGLE;
-                case 1:
-                    return FACEBOOK;
-                case 2:
-                    return VISITOR;
-                default:
-                    return null;
-            }
-        }
-
-        public int value()
-        {
-            return this.value;
-        }
-    };
-
     private boolean bEnableGooglePay        = true;
 
     @Override
@@ -58,6 +23,8 @@ public class MainActivity extends UnityPlayerActivity
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreate");
+
+        LoginManager.getInstance().Init(this);
 
         if (bEnableGooglePay)
         {
@@ -69,7 +36,6 @@ public class MainActivity extends UnityPlayerActivity
             skuList.add("com.xnhd.xnhdhw.5");
             skuList.add("com.xnhd.xnhdhw.6");
 
-            //PayManager.getInstance().Init(this, skuList);
             PayManager.getInstance().Init(this, skuList);
         }
     }
@@ -79,33 +45,31 @@ public class MainActivity extends UnityPlayerActivity
     {
         super.onResume();
 
+        Log.i(TAG, "onResume");
+
         if (bEnableGooglePay)
         {
             //PayManager.getInstance().RefreshUnConsumePurchase();
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        LoginManager.getInstance().onPreActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        LoginManager.getInstance().onPostActivityResult(requestCode, resultCode, data);
+    }
+
     public void  login(int loginType)
     {
-        LoginType type = LoginType.valueOf(loginType);
-        if (type == LoginType.GOOGLE)
-        {
-            Intent intent = new Intent(this, GoogleActivity.class);
-            startActivity(intent);
-        }
-        else if (type == LoginType.FACEBOOK)
-        {
-            Intent intent = new Intent(this, FacebookActivity.class);
-            startActivity(intent);
-        }
-        else if (type == LoginType.VISITOR)
-        {
-            Log.e(TAG, "游客登录还未实现");
-        }
-        else
-        {
-            Log.e(TAG, "账号登录还未实现");
-        }
+        LoginManager.LoginType type = LoginManager.LoginType.valueOf(loginType);
+        LoginManager.getInstance().Login(type, new LoginListenerImpl(this));
+    }
+
+    public void logout()
+    {
+        LoginManager.getInstance().Logout();
     }
 
     public void  pay()

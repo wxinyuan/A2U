@@ -17,14 +17,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.xnhd.xnhdhw.login.GoogleActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"
-            android:label="登陆">
-
-        </activity>
-
         <activity android:name="com.xnhd.xnhdhw.pay.PayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AppTheme"
@@ -33,13 +25,6 @@
 
         </activity>
 
-        <activity android:name="com.xnhd.xnhdhw.login.FacebookActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"
-            android:label="登陆">
-
-        </activity>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="fb479053889528141"/>
         <activity android:name="com.facebook.FacebookActivity" android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" />
         <activity android:name="com.facebook.CustomTabActivity" android:exported="true">
